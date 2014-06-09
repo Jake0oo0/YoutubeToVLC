@@ -53,27 +53,31 @@ def get_links(user):
         author = entry['author'][0]['name']['$t']
         link = entry['link'][0]['href']
         title = entry['title']['$t']
-        add = True
-        if include is not None and include.lower() in title.lower() and add is not False:
-            add = True
-        if exclude is not None and exclude.lower() in title.lower() and add is not False:
-            add = False
-        if exclude_author is not None and exclude_author.lower() == author.lower() and add is not False:
-            add = False
-        if include_author is not None and include_author.lower() == author.lower() and add is not False:
-            add = True
-        if add:
-            print u"Found video for {} at the URL {} with the title {}".format(author, link, title)
-            links.append(link)
+        if exclude is not None and exclude.lower() in title.lower():
+            continue
+        if exclude_author is not None and exclude_author.lower() == author.lower():
+            continue
+        if include is not None and include.lower() not in title.lower():
+            continue
+        if include_author is not None and include_author.lower() != author.lower():
+            continue
+        print u"Found video for {} at the URL {} with the title {}".format(author, link, title)
+        links.append(link)
     return links
 
 
 path = options.vlc_path
 verbose = options.verbose
 
+video_links = get_links(user)
+
+if len(video_links) == 0:
+    print u'No videos were found for the specified user and parameters.'
+    exit()
+
 cmd_line = ''
 try:
-    cmd_line = ' '.join(get_links(user))
+    cmd_line = ' '.join(video_links)
 except ValueError:
     print('Failed to retrieve data for the user {}. Make sure their subscriptions are public.'.format(user))
     exit()
