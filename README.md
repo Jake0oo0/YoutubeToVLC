@@ -25,3 +25,8 @@ This script will retrieve the latest videos from your youtube subsciptions based
 * --vlc-path <> Specify the path to your VLC Media Player instance. Defaults to: C:/Program Files (x86)/VideoLAN/VLC/vlc.exe
 * --verbose <> Specify whether or not to print annoying VLC output.
 
+### Common Issues
+* 'Must specify a Youtube username to get the videos for!' - Make sure to specify your Youtube username with --user <user> when running the program.
+* 'No videos were found for the specified user and parameters.' - It's possible that you specified too many parameters to the point that no videos were found.
+* 'Failed to retrieve data for the user {}. Make sure their subscriptions are public.' - If you are using a different user than yourself, this user's subscriptions may not be public. If you are using your own user, you can make your Youtube subscriptions public by using [this tutorial](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=5&cad=rja&uact=8&sqi=2&ved=0CEkQFjAE&url=http%3A%2F%2Fwww.twelveskip.com%2Ftutorials%2Fyoutube%2F1020%2Fmaking-subscription-private-on-youtube&ei=nBaVU8uuPJKWyASP0ICwCA&usg=AFQjCNEHtCx5ToAfkjH1ePQt18GtI0nlzg&sig2=pzm21nw4IPUqvyp_xbNSjg)
+
