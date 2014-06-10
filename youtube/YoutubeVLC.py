@@ -75,24 +75,25 @@ def check_list(search, string):
     return False
 
 
-path = options.vlc_path
-verbose = options.verbose
+def main():
+    path = options.vlc_path
+    verbose = options.verbose
 
-video_links = get_links(username)
+    video_links = get_links(username)
 
-if len(video_links) == 0:
-    print u'No videos were found for the specified user and parameters.'
-    exit()
+    if len(video_links) == 0:
+        print u'No videos were found for the specified user and parameters.'
+        exit()
 
-cmd_line = ''
-try:
-    cmd_line = ' '.join(video_links)
-except ValueError:
-    print('Failed to retrieve data for the user {}. Make sure their subscriptions are public.'.format(username))
-    exit()
+    cmd_line = ''
+    try:
+        cmd_line = ' '.join(video_links)
+    except ValueError:
+        print('Failed to retrieve data for the user {}. Make sure their subscriptions are public.'.format(username))
+        exit()
 
-if not verbose:
-    FNULL = open(os.devnull, 'w')
-    subprocess.call(path + cmd_line, stdout=FNULL, stderr=subprocess.STDOUT)
-else:
-    subprocess.call(path + cmd_line)
+    if not verbose:
+        FNULL = open(os.devnull, 'w')
+        subprocess.call(path + cmd_line, stdout=FNULL, stderr=subprocess.STDOUT)
+    else:
+        subprocess.call(path + cmd_line)
