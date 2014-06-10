@@ -24,13 +24,13 @@ parser.add_option('--ia', '--include-author', dest='include_author', default=Non
                   help='Specifies the only author to be searched for')
 (options, args) = parser.parse_args()
 
-exclude = options.exclude_title
-include = options.include_title
-include_author = options.include_author
-exclude_author = options.exclude_author
-user = options.user
+exclude = options.exclude_title.split(',') if options.exclude_title is not None else None
+include = options.include_title.split(',') if options.include_title is not None else None
+include_author = options.include_author.split(',') if options.include_author is not None else None
+exclude_author = options.exclude_author.split(',') if options.exclude_author is not None else None
+username = options.user
 
-if user is None:
+if username is None:
     print "Must specify a Youtube username to get the videos for!"
     exit()
 
@@ -53,23 +53,32 @@ def get_links(user):
         author = entry['author'][0]['name']['$t']
         link = entry['link'][0]['href']
         title = entry['title']['$t']
-        if exclude is not None and exclude.lower() in title.lower():
+        if exclude is not None and check_list(exclude, title):
             continue
-        if exclude_author is not None and exclude_author.lower() == author.lower():
+        if exclude_author is not None and check_list(exclude_author, author):
             continue
-        if include is not None and include.lower() not in title.lower():
+        if include is not None and not check_list(include, title):
             continue
-        if include_author is not None and include_author.lower() != author.lower():
+        if include_author is not None and not check_list(include_author, author):
             continue
         print u"Found video for {} at the URL {} with the title {}".format(author, link, title)
         links.append(link)
     return links
 
 
+def check_list(search, string):
+    for item in search:
+        if item.lower() in string.lower():
+            return True
+        if item.lower() == string.lower():
+            return True
+    return False
+
+
 path = options.vlc_path
 verbose = options.verbose
 
-video_links = get_links(user)
+video_links = get_links(username)
 
 if len(video_links) == 0:
     print u'No videos were found for the specified user and parameters.'
@@ -79,7 +88,7 @@ cmd_line = ''
 try:
     cmd_line = ' '.join(video_links)
 except ValueError:
-    print('Failed to retrieve data for the user {}. Make sure their subscriptions are public.'.format(user))
+    print('Failed to retrieve data for the user {}. Make sure their subscriptions are public.'.format(username))
     exit()
 
 if not verbose:
